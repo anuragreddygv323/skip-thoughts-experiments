@@ -212,13 +212,13 @@ class SkipThoughtsEncoder(object):
         return preprocessed_data
 
     def encode(
-        self,
-        sess,
-        data,
-        use_norm=True,
-        verbose=True,
-        batch_size=128,
-        use_eos=False):
+            self,
+            sess,
+            data,
+            use_norm=True,
+            verbose=True,
+            batch_size=128,
+            use_eos=False):
         """Encodes a sequence of sentences as skip-thought vectors.
 
         Args:
@@ -245,8 +245,8 @@ class SkipThoughtsEncoder(object):
             embeddings, mask = _batch_and_pad(
                 data[start_index:start_index + batch_size])
             feed_dict = {
-                    "encode_emb:0": embeddings,
-                    "encode_mask:0": mask,
+                "encode_emb:0": embeddings,
+                "encode_mask:0": mask,
             }
             thought_vectors.extend(
                 sess.run("encoder/thought_vectors:0", feed_dict=feed_dict))

@@ -19,10 +19,12 @@ concatenation of the outputs of each model.
 
 Example usage:
     manager = EncoderManager()
-    manager.load_model(model_config_1, vocabulary_file_1, embedding_matrix_file_1,
-                                         checkpoint_path_1)
-    manager.load_model(model_config_2, vocabulary_file_2, embedding_matrix_file_2,
-                                         checkpoint_path_2)
+    manager.load_model(
+        model_config_1, vocabulary_file_1, 
+        embedding_matrix_file_1, checkpoint_path_1)
+    manager.load_model(
+        model_config_2, vocabulary_file_2, 
+        embedding_matrix_file_2, checkpoint_path_2)
     encodings = manager.encode(data)
 """
 

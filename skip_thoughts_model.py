@@ -174,8 +174,9 @@ class SkipThoughtsModel(object):
         if self.mode == "encode":
             # Word embeddings are fed from an external vocabulary which has possibly
             # been expanded (see vocabulary_expansion.py).
-            encode_emb = tf.placeholder(tf.float32, (
-                    None, None, self.config.word_embedding_dim), "encode_emb")
+            encode_emb = tf.placeholder(
+                dtype=tf.float32, shape=(None, None, self.config.word_embedding_dim),
+                name="encode_emb")
             # No sequences to decode.
             decode_pre_emb = None
             decode_post_emb = None
@@ -233,8 +234,7 @@ class SkipThoughtsModel(object):
 
             if self.config.bidirectional_encoder:
                 if self.config.encoder_dim % 2:
-                    raise ValueError(
-                            "encoder_dim must be even when using a bidirectional encoder.")
+                    raise ValueError("encoder_dim must be even when using a bidirectional encoder.")
                 num_units = self.config.encoder_dim // 2
                 cell_fw = self._initialize_gru_cell(num_units)    # Forward encoder
                 cell_bw = self._initialize_gru_cell(num_units)    # Backward encoder
@@ -259,8 +259,10 @@ class SkipThoughtsModel(object):
 
         self.thought_vectors = thought_vectors
 
-    def _build_decoder(self, name, embeddings, targets, mask, initial_state,
-                                         reuse_logits):
+    def _build_decoder(
+            self, name,
+            embeddings, targets,
+            mask, initial_state, reuse_logits):
         """Builds a sentence decoder.
 
         Args:
@@ -280,7 +282,7 @@ class SkipThoughtsModel(object):
             # Add a padding word at the start of each sentence (to correspond to the
             # prediction of the first word) and remove the last word.
             decoder_input = tf.pad(
-                    embeddings[:, :-1, :], [[0, 0], [1, 0], [0, 0]], name="input")
+                embeddings[:, :-1, :], [[0, 0], [1, 0], [0, 0]], name="input")
             length = tf.reduce_sum(mask, 1, name="length")
             decoder_output, _ = tf.nn.dynamic_rnn(
                 cell=cell,
@@ -304,7 +306,7 @@ class SkipThoughtsModel(object):
                 scope=scope)
 
         losses = tf.nn.sparse_softmax_cross_entropy_with_logits(
-                labels=targets, logits=logits)
+            labels=targets, logits=logits)
         batch_loss = tf.reduce_sum(losses * weights)
         tf.losses.add_loss(batch_loss)
 
